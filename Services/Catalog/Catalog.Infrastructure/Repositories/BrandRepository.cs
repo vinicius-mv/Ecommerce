@@ -24,6 +24,6 @@ public class BrandRepository : IBrandRepository
 
     public async Task<ProductBrand> GetBrand(string id)
     {
-        return await _brands.Find(x => x.Id == id).FirstOrDefaultAsync();
+        return await _brands.Find(b => b.Id == id).FirstOrDefaultAsync();
     }
 }

@@ -2,4 +2,4 @@
 
 public record BrandDto(
     string Id,
-    string name);
+    string Name);

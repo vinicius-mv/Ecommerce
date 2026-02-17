@@ -1,4 +1,5 @@
 ﻿using Catalog.Core.Entities;
+using Catalog.Infrastructure.Data.MongoMappings;
 using Catalog.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -21,13 +22,13 @@ public class DatabaseSeeder
         var client = new MongoClient(databaseSettings.ConnectionString);
         var catalogDb = client.GetDatabase(databaseSettings.DatabaseName);
 
-        var brands = catalogDb.GetCollection<ProductBrand>(databaseSettings.BrandCollectionName);
+        var brands = catalogDb.GetCollection<ProductBrand>(ProductBrandMapping.CollectionName);
         await SeedBrands(brands);
 
-        var types = catalogDb.GetCollection<ProductType>(databaseSettings.TypeCollectionName);
+        var types = catalogDb.GetCollection<ProductType>(ProductTypeMapping.CollectionName);
         await SeedTypes(types);
 
-        var products = catalogDb.GetCollection<Product>(databaseSettings.ProductCollectionName);
+        var products = catalogDb.GetCollection<Product>(ProductMapping.CollectionName);
         await SeedProducts(products);
     }
 

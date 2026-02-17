@@ -1,6 +1,4 @@
-﻿using MongoDB.Driver.Search;
-
-namespace Catalog.Application.DTOs;
+﻿namespace Catalog.Application.DTOs;
 
 public record class ProductDto(
     string Id,

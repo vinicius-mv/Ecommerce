@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace Catalog.Core.Entities;
+﻿namespace Catalog.Core.Entities;
 
 public class Product : BaseEntity
 {
@@ -17,7 +14,6 @@ public class Product : BaseEntity
 
     public ProductType Type { get; private set; }
 
-    [BsonRepresentation(BsonType.Decimal128)]
     public decimal Price { get; private set; }
 
     public DateTimeOffset CreatedDate { get; private set; }
@@ -43,7 +39,7 @@ public class Product : BaseEntity
         this.CreatedDate = DateTime.UtcNow;
     }
 
-    public Product()
+    private Product() // For MongoDB deserialization
     {
     }
 }

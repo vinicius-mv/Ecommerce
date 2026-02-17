@@ -1,5 +1,6 @@
 ﻿using Catalog.Core.Entities;
 using Catalog.Core.Repositories;
+using Catalog.Infrastructure.Data.MongoMappings;
 using Catalog.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -15,7 +16,7 @@ public class BrandRepository : IBrandRepository
         var databaseSettings = databaseOptions.Value;
         var client = new MongoClient(databaseSettings.ConnectionString);
         var catalogDb = client.GetDatabase(databaseSettings.DatabaseName);
-        _brands = catalogDb.GetCollection<ProductBrand>(databaseSettings.BrandCollectionName);
+        _brands = catalogDb.GetCollection<ProductBrand>(ProductBrandMapping.CollectionName);
     }
 
     public async Task<IEnumerable<ProductBrand>> GetAllBrands()

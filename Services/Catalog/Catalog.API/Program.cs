@@ -1,3 +1,4 @@
+using Catalog.Infrastructure.Data.MongoMappings;
 using Catalog.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -13,6 +14,9 @@ builder.Services.AddOpenApi();
 // Build strongly typed settings
 builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection(nameof(DatabaseSettings)));
+
+// Configure MongoDb Entities
+MongoDbMappingConfiguration.Configure();
 
 // Register MongoClient as a singleton
 builder.Services.AddSingleton<IMongoClient>(sp =>

@@ -1,6 +1,7 @@
 ﻿using Catalog.Core.Entities;
 using Catalog.Core.Repositories;
 using Catalog.Core.Specifications;
+using Catalog.Infrastructure.Data.MongoMappings;
 using Catalog.Infrastructure.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -21,9 +22,9 @@ public class ProductRepository : IProductRepository
         var client = new MongoClient(databaseSettings.ConnectionString);
         var catalogDb = client.GetDatabase(databaseSettings.DatabaseName);
 
-        _produts = catalogDb.GetCollection<Product>(databaseSettings.ProductCollectionName);
-        _brands = catalogDb.GetCollection<ProductBrand>(databaseSettings.BrandCollectionName);
-        _types = catalogDb.GetCollection<ProductType>(databaseSettings.TypeCollectionName);
+        _produts = catalogDb.GetCollection<Product>(ProductMapping.CollectionName);
+        _brands = catalogDb.GetCollection<ProductBrand>(ProductBrandMapping.CollectionName);
+        _types = catalogDb.GetCollection<ProductType>(ProductTypeMapping.CollectionName);
     }
 
     public async Task<Product> CreateProduct(Product product)

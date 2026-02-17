@@ -1,6 +1,4 @@
 ﻿using Catalog.Core.Entities;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace Catalog.Application.Responses;
 
@@ -18,6 +16,5 @@ public record ProductResponse
 
     public ProductType Type { get; init; }
 
-    [BsonRepresentation(BsonType.Decimal128)]
     public decimal Price { get; init; }
 }

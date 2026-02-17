@@ -2,7 +2,7 @@
 
 namespace Catalog.Application.DTOs;
 
-public record class CreateProductCreateDto
+public record class CreateProductDto
 {
     [Required]
     public string Name { get; init; }

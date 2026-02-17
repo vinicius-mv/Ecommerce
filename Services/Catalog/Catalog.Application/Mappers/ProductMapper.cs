@@ -1,4 +1,5 @@
-﻿using Catalog.Application.Responses;
+﻿using Catalog.Application.Commands;
+using Catalog.Application.Responses;
 using Catalog.Core.Entities;
 using Catalog.Core.Specifications;
 
@@ -36,5 +37,18 @@ public static class ProductMapper
     public static IEnumerable<ProductResponse> ToResponse(this IEnumerable<Product> products)
     {
         return products.Select(p => p.ToResponse());
+    }
+
+    public static Product ToEntity(this CreateProductCommand commnad, ProductBrand brand, ProductType type)
+    {
+        return new Product(
+            commnad.Name,
+            commnad.Summary,
+            commnad.Description,
+            commnad.ImageFile,
+            brand,
+            type,
+            commnad.Price,
+            DateTime.UtcNow);
     }
 }

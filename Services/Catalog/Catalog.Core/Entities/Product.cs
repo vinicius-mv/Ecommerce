@@ -18,7 +18,7 @@ public class Product : BaseEntity
 
     public DateTimeOffset CreatedDate { get; private set; }
 
-    public Product(string name, string summary, string description, string imageFile, ProductBrand brand, ProductType type, decimal price)
+    public Product(string name, string summary, string description, string imageFile, ProductBrand brand, ProductType type, decimal price, DateTimeOffset createdDate)
     {
         Name = name;
         Summary = summary;
@@ -27,8 +27,7 @@ public class Product : BaseEntity
         Brand = brand;
         Type = type;
         Price = price;
-
-        SetCreatedDate();
+        CreatedDate = createdDate;
     }
 
     public void SetCreatedDate()

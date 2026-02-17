@@ -24,5 +24,5 @@ public record class CreateProductDto
 
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
-    public int Price { get; init; }
+    public decimal Price { get; init; }
 }

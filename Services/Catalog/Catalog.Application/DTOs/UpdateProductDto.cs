@@ -6,9 +6,6 @@ namespace Catalog.Application.DTOs;
 public record class UpdateProductDto
 {
     [Required]
-    public string Id { get; init; }
-
-    [Required]
     public string Name { get; init; }
 
     [Required]
@@ -28,5 +25,5 @@ public record class UpdateProductDto
 
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
-    public int Price { get; init; }
+    public decimal Price { get; init; }
 }

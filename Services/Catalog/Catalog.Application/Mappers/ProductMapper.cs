@@ -53,11 +53,11 @@ public static class ProductMapper
             DateTime.UtcNow);
     }
 
-    public static UpdateProductCommand ToCommand(this UpdateProductDto dto)
+    public static UpdateProductCommand ToCommand(this UpdateProductDto dto, string id)
     {
         return new UpdateProductCommand
         {
-            Id = dto.Id,
+            Id = id,
             Name = dto.Name,
             Summary = dto.Summary,
             Description = dto.Description,

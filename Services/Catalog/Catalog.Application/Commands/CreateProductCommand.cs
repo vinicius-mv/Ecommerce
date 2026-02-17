@@ -15,7 +15,7 @@ public record class CreateProductCommand : IRequest<ProductResponse>
     public string ImageFile { get; init; }
     public string BrandId { get; init; }
     public string TypeId { get; init; }
-    public int Price { get; init; }
+    public decimal Price { get; init; }
 }
 
 public record class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ProductResponse>

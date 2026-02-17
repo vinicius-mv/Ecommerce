@@ -71,9 +71,9 @@ public class CatalogController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateProduct(UpdateProductDto updateProductDto)
-    {   
-        var command = updateProductDto.ToCommand();
+    public async Task<ActionResult> UpdateProduct(string id, UpdateProductDto updateProductDto)
+    {
+        var command = updateProductDto.ToCommand(id);
         var result = await _mediator.Send(command);
 
         if (!result) return NotFound();

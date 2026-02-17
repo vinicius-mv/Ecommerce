@@ -1,7 +1,9 @@
 ﻿using Catalog.Core.Entities;
 using Catalog.Core.Repositories;
 using Catalog.Core.Specifications;
+using Catalog.Infrastructure.Settings;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using static System.Net.WebRequestMethods;
 
@@ -13,13 +15,15 @@ public class ProductRepository : IProductRepository
     private readonly IMongoCollection<ProductBrand> _brands;
     private readonly IMongoCollection<ProductType> _types;
 
-    public ProductRepository(IConfiguration configuration)
+    public ProductRepository(IOptions<DatabaseSettings> databaseOptions)
     {
-        var client = new MongoClient(configuration["DatabaseSettings:ConnectionString"]);
-        var catalogDb = client.GetDatabase(configuration["DatabaseSettings:DatabaseName"]);
-        _produts = catalogDb.GetCollection<Product>(configuration["DatabaseSettings:ProductCollectionName"]);
-        _brands = catalogDb.GetCollection<ProductBrand>(configuration["DatabaseSettings:BrandCollectionName"]);
-        _types = catalogDb.GetCollection<ProductType>(configuration["DatabaseSettings:TypeCollectionName"]);
+        var databaseSettings = databaseOptions.Value;
+        var client = new MongoClient(databaseSettings.ConnectionString);
+        var catalogDb = client.GetDatabase(databaseSettings.DatabaseName);
+
+        _produts = catalogDb.GetCollection<Product>(databaseSettings.ProductCollectionName);
+        _brands = catalogDb.GetCollection<ProductBrand>(databaseSettings.BrandCollectionName);
+        _types = catalogDb.GetCollection<ProductType>(databaseSettings.TypeCollectionName);
     }
 
     public async Task<Product> CreateProduct(Product product)

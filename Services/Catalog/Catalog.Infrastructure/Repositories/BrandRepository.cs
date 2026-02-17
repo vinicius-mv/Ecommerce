@@ -14,7 +14,7 @@ public class BrandRepository : IBrandRepository
         var client = new MongoClient(configuration["DatabaseSettings:ConnectionString"]);
 
         var catalogDb = client.GetDatabase(configuration["DatabaseSettings:DatabaseName"]);
-        _brands= catalogDb.GetCollection<ProductBrand>(configuration["DatabaseSettings:BrandsCollectionName"]);
+        _brands = catalogDb.GetCollection<ProductBrand>(configuration["DatabaseSettings:BrandCollectionName"]);
     }
 
     public async Task<IEnumerable<ProductBrand>> GetAllBrands()

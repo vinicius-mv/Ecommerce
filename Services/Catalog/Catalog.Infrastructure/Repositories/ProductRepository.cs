@@ -1,0 +1,127 @@
+﻿using Catalog.Core.Entities;
+using Catalog.Core.Repositories;
+using Catalog.Core.Specifications;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
+using static System.Net.WebRequestMethods;
+
+namespace Catalog.Infrastructure.Repositories;
+
+public class ProductRepository : IProductRepository
+{
+    private readonly IMongoCollection<Product> _produts;
+    private readonly IMongoCollection<ProductBrand> _brands;
+    private readonly IMongoCollection<ProductType> _types;
+
+    public ProductRepository(IConfiguration configuration)
+    {
+        var client = new MongoClient(configuration["DatabaseSettings:ConnectionString"]);
+        var catalogDb = client.GetDatabase(configuration["DatabaseSettings:DatabaseName"]);
+        _produts = catalogDb.GetCollection<Product>(configuration["DatabaseSettings:ProductCollectionName"]);
+        _brands = catalogDb.GetCollection<ProductBrand>(configuration["DatabaseSettings:BrandCollectionName"]);
+        _types = catalogDb.GetCollection<ProductType>(configuration["DatabaseSettings:TypeCollectionName"]);
+    }
+
+    public async Task<Product> CreateProduct(Product product)
+    {
+        await _produts.InsertOneAsync(product);
+        return product;
+    }
+
+    public async Task<bool> DeleteProduct(string productId)
+    {
+        var deleteResult = await _produts.DeleteOneAsync(p => p.Id == productId);
+        return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
+    }
+
+    public async Task<IEnumerable<Product>> GetAllProducts()
+    {
+        return await _produts.Find(_ => true).ToListAsync();
+    }
+
+    public async Task<ProductBrand> GetBrandsById(string brandId)
+    {
+        return _brands.Find(p => p.Id == brandId).FirstOrDefault();
+    }
+
+    public async Task<Product> GetProduct(string productId)
+    {
+        return await _produts.Find(p => p.Id == productId).FirstOrDefaultAsync();
+    }
+
+    public async Task<Pagination<Product>> GetProducts(CatalogSpecParams specParams)
+    {
+        var builder = Builders<Product>.Filter;
+        var filter = builder.Empty;
+
+        if (!string.IsNullOrEmpty(specParams.Search))
+        {
+            var productNameToSearch = specParams.Search.ToLower();
+            filter &= builder.Where(p => p.Name.ToLower().Contains(productNameToSearch));
+        }
+
+        if (!string.IsNullOrEmpty(specParams.BrandId))
+        {
+            filter &= builder.Eq(p => p.Brand.Id, specParams.BrandId);
+        }
+
+        if (!string.IsNullOrEmpty(specParams.TypeId))
+        {
+            filter &= builder.Where(p => p.Type.Id == specParams.TypeId);
+        }
+
+        var totalItems = await _produts.CountDocumentsAsync(filter);
+        var data = await ApplyDataFilter(specParams, filter);
+
+        return new Pagination<Product>(specParams.PageIndex, specParams.PageSize, totalItems, data);
+    }
+
+    public async Task<IEnumerable<Product>> GetProductsByBrand(string brandName)
+    {
+        return await _produts.Find(p => p.Brand.Name.ToLower() == brandName.ToLower()).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Product>> GetProductsByName(string productName)
+    {
+        var filter = Builders<Product>.Filter.Regex(p => p.Name, new MongoDB.Bson.BsonRegularExpression($".*{productName}.*", "i"));
+        return await _produts.Find(filter).ToListAsync();
+    }
+
+    public async Task<ProductType> GetTypesById(string typeId)
+    {
+        return await _types.Find(t => t.Id == typeId).FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> UpdateProduct(Product product)
+    {
+        var replaceResult = await _produts.ReplaceOneAsync(p => p.Id == product.Id, product);
+        return replaceResult.IsAcknowledged && replaceResult.ModifiedCount > 0;
+    }
+
+    private async Task<IReadOnlyCollection<Product>> ApplyDataFilter(CatalogSpecParams specParams, FilterDefinition<Product> filter)
+    {
+        var sortDefinitionBuilder = Builders<Product>.Sort.Ascending();
+
+        if (!string.IsNullOrEmpty(specParams.Sort))
+        {
+            sortDefinitionBuilder = specParams.Sort switch
+            {
+                "priceAsc" => Builders<Product>.Sort.Ascending(p => p.Price),
+                "priceDesc" => Builders<Product>.Sort.Descending(p => p.Price),
+                "nameAsc" => Builders<Product>.Sort.Ascending(p => p.Name),
+                "nameDesc" => Builders<Product>.Sort.Descending(p => p.Name),
+                _ => Builders<Product>.Sort.Ascending(p => p.Name),
+            };
+        }
+
+        var skipCount = (specParams.PageIndex - 1) * specParams.PageSize;
+
+        var data = await _produts.Find(filter)
+            .Sort(sortDefinitionBuilder)
+            .Skip(skipCount)
+            .Limit(specParams.PageSize)
+            .ToListAsync();
+
+        return await _produts.Find(filter).Sort(sortDefinitionBuilder).ToListAsync();
+    }
+}

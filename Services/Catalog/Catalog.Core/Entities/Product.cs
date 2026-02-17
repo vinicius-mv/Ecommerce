@@ -21,4 +21,29 @@ public class Product : BaseEntity
     public decimal Price { get; private set; }
 
     public DateTimeOffset CreatedDate { get; private set; }
+
+    public Product(string name, string summary, string description, string imageFile, ProductBrand brand, ProductType type, decimal price)
+    {
+        Name = name;
+        Summary = summary;
+        Description = description;
+        ImageFile = imageFile;
+        Brand = brand;
+        Type = type;
+        Price = price;
+
+        SetCreatedDate();
+    }
+
+    public void SetCreatedDate()
+    {
+        if (this.CreatedDate != default)
+            throw new InvalidOperationException("CreatedDate has already been set and cannot be modified.");
+
+        this.CreatedDate = DateTime.UtcNow;
+    }
+
+    public Product()
+    {
+    }
 }

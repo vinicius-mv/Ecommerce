@@ -27,7 +27,19 @@ public class Product : BaseEntity
         Brand = brand;
         Type = type;
         Price = price;
+
         CreatedDate = createdDate;
+    }
+
+    public void Update(string name, string summary, string description, string imageFile, ProductBrand brand, ProductType type, decimal price)
+    {
+        Name = name;
+        Summary = summary;
+        Description = description;
+        ImageFile = imageFile;
+        Brand = brand;
+        Type = type;
+        Price = price;
     }
 
     public void SetCreatedDate()

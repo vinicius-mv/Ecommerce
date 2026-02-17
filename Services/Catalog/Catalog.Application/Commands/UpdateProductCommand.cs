@@ -1,14 +1,14 @@
-﻿using Catalog.Application.Mappers;
+﻿using Catalog.Application.DTOs;
 using Catalog.Application.Responses;
 using Catalog.Core.Entities;
 using Catalog.Core.Repositories;
 using MediatR;
-using System.ComponentModel.DataAnnotations;
 
 namespace Catalog.Application.Commands;
 
-public record class CreateProductCommand : IRequest<ProductResponse>
+public record class UpdateProductCommand : IRequest<bool>
 {
+    public string Id { get; init; }
     public string Name { get; init; }
     public string Summary { get; init; }
     public string Description { get; init; }
@@ -18,26 +18,35 @@ public record class CreateProductCommand : IRequest<ProductResponse>
     public int Price { get; init; }
 }
 
-public record class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ProductResponse>
+public record class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, bool>
 {
     private readonly IProductRepository _productRepository;
 
-    public CreateProductCommandHandler(IProductRepository productRepository)
+    public UpdateProductCommandHandler(IProductRepository productRepository)
     {
         _productRepository = productRepository;
     }
 
-    public async Task<ProductResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
+        var productEntity = await _productRepository.GetProduct(request.Id);
+        if (productEntity == null) throw new ApplicationException($"Product with ID '{request.Id}' was not found");
+
         var brand = await _productRepository.GetBrandById(request.BrandId);
         if (brand == null) throw new ApplicationException($"Brand with ID '{request.BrandId}' was not found.");
 
         var type = await _productRepository.GetTypeById(request.TypeId);
         if (type == null) throw new ApplicationException($"Type with ID '{request.TypeId}' was not found.");
 
-        var productEntity = request.ToEntity(brand, type);
-        var newProduct = await _productRepository.CreateProduct(productEntity);
+        productEntity.Update(
+            request.Name,
+            request.Summary,
+            request.Description,
+            request.ImageFile,
+            brand,
+            type,
+            request.Price);
 
-        return newProduct.ToResponse();
+        return await _productRepository.UpdateProduct(productEntity);
     }
 }

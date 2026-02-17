@@ -32,4 +32,9 @@ public static class ProductMapper
             productsPagination.Count,
             productResponseList);
     }
+
+    public static IEnumerable<ProductResponse> ToResponse(this IEnumerable<Product> products)
+    {
+        return products.Select(p => p.ToResponse());
+    }
 }

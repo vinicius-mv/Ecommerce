@@ -2,7 +2,8 @@
 
 public class CatalogSpecParams
 {
-    public int MaxPageSize { get; private set; } = 70;
+
+    private const int _maxPageSize = 70;
 
     public int PageIndex { get; private set; } = 1;
 
@@ -11,7 +12,7 @@ public class CatalogSpecParams
     public int PageSize
     {
         get { return _pageSize; }
-        set { _pageSize = value > MaxPageSize ? MaxPageSize : value; }
+        set { _pageSize = value > _maxPageSize ? _maxPageSize : value; }
     }
 
     public string? BrandId { get; private set; }

@@ -18,7 +18,7 @@ public class Product : BaseEntity
 
     public DateTimeOffset CreatedDate { get; private set; }
 
-    public Product(string name, string summary, string description, string imageFile, ProductBrand brand, ProductType type, decimal price, DateTimeOffset createdDate)
+    public Product(string name, string summary, string description, string imageFile, ProductBrand brand, ProductType type, decimal price, DateTimeOffset createdDate, string id = "")
     {
         Name = name;
         Summary = summary;
@@ -27,8 +27,8 @@ public class Product : BaseEntity
         Brand = brand;
         Type = type;
         Price = price;
-
         CreatedDate = createdDate;
+        Id = id;
     }
 
     public void Update(string name, string summary, string description, string imageFile, ProductBrand brand, ProductType type, decimal price)
@@ -50,7 +50,7 @@ public class Product : BaseEntity
         this.CreatedDate = DateTime.UtcNow;
     }
 
-    private Product() // For MongoDB deserialization
+    protected Product() // constructor for rehydration
     {
     }
 }

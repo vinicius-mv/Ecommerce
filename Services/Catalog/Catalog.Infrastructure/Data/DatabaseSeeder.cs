@@ -37,7 +37,7 @@ public class DatabaseSeeder
         if (await types.CountDocumentsAsync(_ => true) > 0) return;
 
         var typeData = await File.ReadAllTextAsync(Path.Combine(_seedBasePath, "types.json"));
-        var typesToInsert = JsonSerializer.Deserialize<List<ProductType>>(typeData);
+        var typesToInsert = JsonSerializer.Deserialize<IEnumerable<ProductType>>(typeData);
         await types.InsertManyAsync(typesToInsert);
     }
 
@@ -46,7 +46,7 @@ public class DatabaseSeeder
         if (await brands.CountDocumentsAsync(_ => true) > 0) return;
 
         var brandData = await File.ReadAllTextAsync(Path.Combine(_seedBasePath, "brands.json"));
-        var brandsToInsert = JsonSerializer.Deserialize<List<ProductBrand>>(brandData);
+        var brandsToInsert = JsonSerializer.Deserialize<IEnumerable<ProductBrand>>(brandData);
         await brands.InsertManyAsync(brandsToInsert);
     }
 
@@ -55,7 +55,7 @@ public class DatabaseSeeder
         if (await products.CountDocumentsAsync(_ => true) > 0) return;
 
         var productData = await File.ReadAllTextAsync(Path.Combine(_seedBasePath, "products.json"));
-        var productsToInsert = JsonSerializer.Deserialize<List<Product>>(productData);
+        var productsToInsert = JsonSerializer.Deserialize<IEnumerable<Product>>(productData);
         foreach (var product in productsToInsert)
         {
             if (product.CreatedDate == default)

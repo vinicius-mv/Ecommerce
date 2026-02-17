@@ -9,8 +9,9 @@ public class MongoDbMappingConfiguration
         if (_isConfigured) return;
 
         BaseEntityMapping.Configure();
+        ProductBrandMapping.Configure();
+        ProductTypeMapping.Configure();
         ProductMapping.Configure();
-        // Add other entity mappings here
 
         _isConfigured = true;
     }

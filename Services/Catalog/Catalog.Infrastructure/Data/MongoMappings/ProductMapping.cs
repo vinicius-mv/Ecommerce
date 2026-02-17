@@ -10,15 +10,12 @@ namespace Catalog.Infrastructure.Data.MongoMappings
 
         public static void Configure()
         {
+            if (BsonClassMap.IsClassMapRegistered(typeof(Product)))
+                return;
+
             BsonClassMap.RegisterClassMap<Product>(cm =>
             {
-                if (BsonClassMap.IsClassMapRegistered(typeof(Product)))
-                    return;
-
                 cm.AutoMap();
-                cm.MapProperty(p => p.Price)
-                    .SetSerializer(new MongoDB.Bson.Serialization.Serializers.DecimalSerializer(BsonType.Decimal128));
-                cm.MapCreator(p => new Product(p.Name, p.Summary, p.Description, p.ImageFile, p.Brand, p.Type, p.Price, p.CreatedDate));
             });
         }
     }

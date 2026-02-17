@@ -9,11 +9,11 @@ public class BaseEntityMapping
 {
     public static void Configure()
     {
+        if (BsonClassMap.IsClassMapRegistered(typeof(BaseEntity)))
+            return;
+
         BsonClassMap.RegisterClassMap<BaseEntity>(cm =>
         {
-            if (BsonClassMap.IsClassMapRegistered(typeof(BaseEntity)))
-                return;
-
             cm.AutoMap();
             cm.MapIdProperty(e => e.Id)
                 .SetIdGenerator(StringObjectIdGenerator.Instance)

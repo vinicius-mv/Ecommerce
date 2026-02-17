@@ -21,7 +21,7 @@ public class CatalogController : ControllerBase
     }
 
     [HttpGet("GetAllProducts")]
-    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts(CatalogSpecParams specParams)
+    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts([FromQuery] CatalogSpecParams specParams)
     {
         var query = new GetAllProductsQuery(specParams);
         var result = await _mediator.Send(query);

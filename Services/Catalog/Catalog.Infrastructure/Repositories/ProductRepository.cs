@@ -105,7 +105,7 @@ public class ProductRepository : IProductRepository
 
     private async Task<IReadOnlyCollection<Product>> ApplyDataFilter(CatalogSpecParams specParams, FilterDefinition<Product> filter)
     {
-        var sortDefinitionBuilder = Builders<Product>.Sort.Ascending();
+        var sortDefinitionBuilder = Builders<Product>.Sort.Ascending(p => p.Name);
 
         if (specParams.Sort is not null)
         {
@@ -127,6 +127,6 @@ public class ProductRepository : IProductRepository
             .Limit(specParams.PageSize)
             .ToListAsync();
 
-        return await _produts.Find(filter).Sort(sortDefinitionBuilder).ToListAsync();
+        return data;
     }
 }

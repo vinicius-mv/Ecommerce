@@ -44,10 +44,11 @@ builder.Services.Configure<DatabaseSettings>(
 MongoDbMappingConfiguration.Configure();
 
 // Register MongoClient as a singleton
-builder.Services.AddSingleton<IMongoClient>(sp =>
+builder.Services.AddSingleton<IMongoDatabase>(sp =>
 {
     var databaseSettings = sp.GetRequiredService<IOptions<DatabaseSettings>>().Value;
-    return new MongoClient(databaseSettings.ConnectionString);
+    var client = new MongoClient(databaseSettings.ConnectionString);
+    return client.GetDatabase(databaseSettings.DatabaseName);
 });
 
 // Custom Services

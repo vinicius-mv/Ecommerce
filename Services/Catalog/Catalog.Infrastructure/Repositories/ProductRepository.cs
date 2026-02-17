@@ -2,11 +2,7 @@
 using Catalog.Core.Repositories;
 using Catalog.Core.Specifications;
 using Catalog.Infrastructure.Data.MongoMappings;
-using Catalog.Infrastructure.Settings;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using static System.Net.WebRequestMethods;
 
 namespace Catalog.Infrastructure.Repositories;
 
@@ -16,12 +12,8 @@ public class ProductRepository : IProductRepository
     private readonly IMongoCollection<ProductBrand> _brands;
     private readonly IMongoCollection<ProductType> _types;
 
-    public ProductRepository(IOptions<DatabaseSettings> databaseOptions)
+    public ProductRepository(IMongoDatabase catalogDb)
     {
-        var databaseSettings = databaseOptions.Value;
-        var client = new MongoClient(databaseSettings.ConnectionString);
-        var catalogDb = client.GetDatabase(databaseSettings.DatabaseName);
-
         _produts = catalogDb.GetCollection<Product>(ProductMapping.CollectionName);
         _brands = catalogDb.GetCollection<ProductBrand>(ProductBrandMapping.CollectionName);
         _types = catalogDb.GetCollection<ProductType>(ProductTypeMapping.CollectionName);

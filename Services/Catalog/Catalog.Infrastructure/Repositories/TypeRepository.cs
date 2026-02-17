@@ -11,11 +11,8 @@ public class TypeRepository : ITypeRepository
 {
     private readonly IMongoCollection<ProductType> _types;
 
-    public TypeRepository(IOptions<DatabaseSettings> databaseOptions)
+    public TypeRepository(IMongoDatabase catalogDb)
     {
-        var databaseSettings = databaseOptions.Value;
-        var client = new MongoClient(databaseSettings.ConnectionString);
-        var catalogDb = client.GetDatabase(databaseSettings.DatabaseName);
         _types = catalogDb.GetCollection<ProductType>(ProductTypeMapping.CollectionName);
     }
 

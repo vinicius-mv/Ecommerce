@@ -10,4 +10,12 @@
     <ProjectReference Include="..\Catalog.Core\Catalog.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.0.0" />
+  </ItemGroup>
+
 </Project>

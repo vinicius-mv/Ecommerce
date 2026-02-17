@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace Catalog.Application.DTOs;
 
 public record class UpdateProductDto
 {
+    [Required]
+    public string Id { get; init; }
+
     [Required]
     public string Name { get; init; }
 

@@ -1,4 +1,5 @@
 ﻿using Catalog.Application.Commands;
+using Catalog.Application.DTOs;
 using Catalog.Application.Responses;
 using Catalog.Core.Entities;
 using Catalog.Core.Specifications;
@@ -50,5 +51,34 @@ public static class ProductMapper
             type,
             commnad.Price,
             DateTime.UtcNow);
+    }
+
+    public static UpdateProductCommand ToCommand(this UpdateProductDto dto)
+    {
+        return new UpdateProductCommand
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Summary = dto.Summary,
+            Description = dto.Description,
+            ImageFile = dto.ImageFile,
+            BrandId = dto.BrandId,
+            TypeId = dto.TypeId,
+            Price = dto.Price
+        };
+    }
+
+    public static CreateProductCommand ToCommand(this CreateProductDto dto)
+    {
+        return new CreateProductCommand
+        {
+            Name = dto.Name,
+            Summary = dto.Summary,
+            Description = dto.Description,
+            ImageFile = dto.ImageFile,
+            BrandId = dto.BrandId,
+            TypeId = dto.TypeId,
+            Price = dto.Price
+        };
     }
 }

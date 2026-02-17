@@ -102,14 +102,14 @@ public class ProductRepository : IProductRepository
     {
         var sortDefinitionBuilder = Builders<Product>.Sort.Ascending();
 
-        if (!string.IsNullOrEmpty(specParams.Sort))
+        if (specParams.Sort is not null)
         {
             sortDefinitionBuilder = specParams.Sort switch
             {
-                "priceAsc" => Builders<Product>.Sort.Ascending(p => p.Price),
-                "priceDesc" => Builders<Product>.Sort.Descending(p => p.Price),
-                "nameAsc" => Builders<Product>.Sort.Ascending(p => p.Name),
-                "nameDesc" => Builders<Product>.Sort.Descending(p => p.Name),
+                ProductSortOption.PriceAsc => Builders<Product>.Sort.Ascending(p => p.Price),
+                ProductSortOption.PriceDesc => Builders<Product>.Sort.Descending(p => p.Price),
+                ProductSortOption.NameAsc => Builders<Product>.Sort.Ascending(p => p.Name),
+                ProductSortOption.NameDesc => Builders<Product>.Sort.Descending(p => p.Name),
                 _ => Builders<Product>.Sort.Ascending(p => p.Name),
             };
         }

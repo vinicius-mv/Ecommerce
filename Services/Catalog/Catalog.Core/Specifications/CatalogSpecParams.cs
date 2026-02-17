@@ -18,7 +18,7 @@ public class CatalogSpecParams
 
     public string? TypeId { get; private set; }
 
-    public string? Sort { get; private set; }
+    public ProductSortOption? Sort { get; private set; }
 
     public string? Search { get; private set; }
 }

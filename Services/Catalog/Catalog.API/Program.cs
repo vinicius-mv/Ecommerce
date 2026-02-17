@@ -10,6 +10,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,10 @@ BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String))
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => 
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())); // Serialize/deserialize enums as their string names (e.g., "NameAsc") so Swagger shows readable values and query binding accepts those strings instead of numeric values.
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

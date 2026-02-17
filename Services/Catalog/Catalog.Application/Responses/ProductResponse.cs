@@ -4,6 +4,8 @@ namespace Catalog.Application.Responses;
 
 public record ProductResponse
 {
+    public string Id { get; init; }
+
     public string Name { get; init; }
 
     public string Summary { get; init; }
@@ -12,9 +14,11 @@ public record ProductResponse
 
     public string ImageFile { get; init; }
 
-    public ProductBrand Brand { get; init; }
+    public BrandResponse Brand { get; init; }
 
-    public ProductType Type { get; init; }
+    public TypeResponse Type { get; init; }
 
     public decimal Price { get; init; }
+
+    public DateTimeOffset CreatedDate { get; init; }
 }

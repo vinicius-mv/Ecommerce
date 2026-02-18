@@ -1,4 +1,5 @@
 ﻿using Basket.Application.Commands;
+using Basket.Application.DTOs;
 using Basket.Application.Responses;
 using Basket.Core.Entities;
 
@@ -24,5 +25,12 @@ public static class ShoppingCartMapper
         return new ShoppingCart(
             command.Username,
             command.Items.ToEntity().ToList());
+    }
+
+    public static CreateShoppingCartCommand ToCommand(this CreateShoppingCartDto dto)
+    {
+        return new CreateShoppingCartCommand(
+            dto.UserName,
+            dto.Items);
     }
 }

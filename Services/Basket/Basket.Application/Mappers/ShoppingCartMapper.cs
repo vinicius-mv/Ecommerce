@@ -1,4 +1,5 @@
-﻿using Basket.Application.Responses;
+﻿using Basket.Application.Commands;
+using Basket.Application.Responses;
 using Basket.Core.Entities;
 
 namespace Basket.Application.Mappers;
@@ -10,11 +11,18 @@ public static class ShoppingCartMapper
     {
         return new ShoppingCartResponse(
             shoppingCart.UserName,
-            shoppingCart.Items.Select(i => i.ToResponse()).ToList(),
+            shoppingCart.Items.ToResponse().ToList(),
             shoppingCart.GetToltaPrice());
     }
 
     // Delegate based Mapper
     public static readonly Func<ShoppingCart, ShoppingCartResponse> MapToResponse = shoppingCart => shoppingCart.ToResponse();
 
+
+    public static ShoppingCart ToEntity(this CreateShoppingCartCommand command)
+    {
+        return new ShoppingCart(
+            command.Username,
+            command.Items.ToEntity().ToList());
+    }
 }

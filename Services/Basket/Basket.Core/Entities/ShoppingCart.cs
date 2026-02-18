@@ -10,6 +10,12 @@ public class ShoppingCart
         UserName = userName;
     }
 
+    public ShoppingCart(string userName, List<ShoppingCartItem> items)
+    {
+        UserName = userName;
+        Items = items;
+    }
+
     protected ShoppingCart()    // constructor for rehydration
     {
     }

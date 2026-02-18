@@ -1,20 +1,14 @@
 {
   "profiles": {
-    "http": {
+    "Basket": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5280"
-    },
-    "https": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7227;http://localhost:5280"
+      "applicationUrl": "https://localhost:8001;http://localhost:5001"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",

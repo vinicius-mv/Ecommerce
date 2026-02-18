@@ -2,7 +2,7 @@
 
 public record class ShoppingCartResponse
 {
-    public string UserName { get; init; }
+    public string UserName { get; init; } = string.Empty;
     public List<ShoppingCartItemResponse> Items { get; init; } = new();
 
     public decimal TotalPrice { get; init; }

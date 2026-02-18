@@ -16,7 +16,7 @@ public class ShoppingCart
         Items = items;
     }
 
-    protected ShoppingCart()    // constructor for rehydration
+    public ShoppingCart()    // parameterless constructor for deserialization
     {
     }
 

@@ -16,4 +16,8 @@ public class ShoppingCartItem
         ProductName = productName;
         ImageFile = imageFile;
     }
+
+    public ShoppingCartItem()    // parameterless constructor for deserialization
+    {
+    }
 }

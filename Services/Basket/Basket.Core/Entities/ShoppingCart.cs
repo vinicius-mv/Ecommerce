@@ -13,4 +13,14 @@ public class ShoppingCart
     protected ShoppingCart()    // constructor for rehydration
     {
     }
+
+    public decimal GetToltaPrice()
+    {
+        var totalPrice = 0.0m;
+        foreach (var item in Items)
+        {
+            totalPrice += item.Price * item.Quantity;
+        }
+        return totalPrice;
+    }
 }
